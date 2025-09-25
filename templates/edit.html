@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block title %}記事編集{% endblock %}
+{% block content %}
+    <h2>記事編集</h2>
+    <form method="POST">
+        <label for="'title">タイトル</label>
+        <input type="text" id="title" name="title" value="{{ post.title}}" required>
+        <label for="body">内容</label>
+        <input type="text" id="body" name="body" value="{{ post.body}}" required>
+        <input type="submit" value="更新">
+    </form>
+{% endblock %}

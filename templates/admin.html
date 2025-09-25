@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block title %}記事を表示{% endblock %}
+{% block content %}
+    <h2>記事一覧</h2>
+    <a href="./create">追加</a>
+    <article>
+        {% for post in posts %}
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.created_at }}</p>
+            <p>{{ post.body }}</p>
+            <span><a href=".\edit\{{ post.id }}">更新</a></span>
+            <span><a href=".\delete\{{ post.id }}">削除</a></span>
+            <hr>
+        {% else %}
+            <p>記事がありません。</p>
+        {% endfor %}
+    </article>
+
+{% endblock %}
