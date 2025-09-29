@@ -1,0 +1,77 @@
+/* index.html */
+/* Bodyのスタイル */
+body {
+    background-color: #FFA07A; /* 綺麗なサーモンオレンジのような色 */
+    margin: 0;
+    padding: 20px; /* コンテンツが円に隠れないようにパディングを設定 */
+    font-family: Arial, sans-serif;
+    color: #333;
+    min-height: 100vh; /* 画面全体の高さを確保 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* 円が画面外に出てもスクロールバーが出ないように */
+    position: relative; /* 円の配置基準とするため */
+}
+
+h1, p {
+    z-index: 1; /* 円よりも手前に表示されるように */
+    text-align: center;
+}
+
+/* 動く円のスタイル */
+.moving-circle {
+    position: absolute; /* 親要素（body）を基準に配置 */
+    /* 画面の約1/3の大きさに設定 */
+    width: 33.33vw; /* viewport widthの1/3 */
+    height: 33.33vw; /* viewport widthの1/3 (正円にするため) */
+    border-radius: 50%; /* 円形にする */
+    background-color: rgba(255, 255, 255, 0.4); /* 半透明の白色 */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2); /* 少し影をつける */
+    z-index: 0; /* bodyのコンテンツより奥に表示 */
+
+    /* 初期位置: 右下の画面外 */
+    bottom: -10%; /* 画面の下端から少しはみ出す */
+    right: -10%; /* 画面の右端から少しはみ出す */
+
+    /* アニメーションの設定 */
+    animation: moveCircle 10s linear infinite; /* 15秒で1周、直線的に無限に繰り返す */
+}
+
+/* キーフレームアニメーションの定義 */
+@keyframes moveCircle {
+    0% {
+        bottom: -50%;
+        right: -50%;
+        transform: scale(1); /* 最初は通常のサイズ */
+        opacity: 0.1;
+    }
+    50% {
+        bottom: 50%;
+        right: 50%;
+        transform: scale(1.2); /* 中間地点で少し拡大 */
+        opacity: 0.7;
+    }
+    100% {
+        bottom: 100%; /* 画面の上端まで移動 */
+        right: 100%; /* 画面の左端まで移動 */
+        transform: scale(0.8); /* 最後に少し縮小 */
+        opacity: 0.1;
+    }
+}
+
+/* base.html */
+
+#nav-bar {
+    background-color: #FF6347; /* 鮮やかなトマトレッド */
+    color: white;
+    top: 0;
+    left: 0;
+    padding: 15px 20px;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed; /* スクロールしても上部に固定 */
+    z-index: 10; /* 他の要素より前面に表示 */
+}

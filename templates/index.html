@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
 {% block content %}
-    <h1>今日の献立ランダム提案サービス</h1>
+<div class="moving-circle"></div>
+<div class="title-container">
+    <h1 id="app-title">今日の献立ランダム提案サービス</h1>
     <p>新しい一日を、新しい料理で始めましょう！</p>
+</div>
+<div class="selection-container">
+    <a href="{{ url_for('admin')}}">登録料理一覧</a>
+    <a href="{{ url_for('create')}}">料理の登録</a>
+    <a href="{{ url_for('feeling')}}">今日の気分は？</a>
+</div>
+    
 {% endblock %}

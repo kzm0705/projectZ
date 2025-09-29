@@ -3,10 +3,6 @@
 from flask import Flask
 from flask import render_template,request,redirect
 
-from flask_sqlalchemy import SQLAlchemy
-import pytz
-from datetime import datetime
-
 from db import db, Post
 from init import app
 
@@ -15,12 +11,13 @@ from init import app
 def index():
     return render_template('index.html')
 
-
+#READ
 @app.route('/admin')
 def admin():
     posts = Post.query.all()
     return render_template('admin.html', posts=posts)
 
+#CRUDのC
 @app.route("/create", methods=['GET', 'POST'])
 def create():
     if request.method == 'POST':
@@ -35,6 +32,7 @@ def create():
             return f"An error occurred while adding the post: {e}"
     return render_template('create.html')
 
+#UPDATE
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
     post = Post.query.get_or_404(id)
@@ -47,7 +45,7 @@ def edit(id):
         except Exception as e:
             return f"An error occurred while updating the post: {e}"
     return render_template('edit.html', post=post)
-
+#DELETE
 @app.route('/delete/<int:id>')
 def delete(id):
     post = Post.query.get_or_404(id)
@@ -58,5 +56,6 @@ def delete(id):
     except Exception as e:
         return f'An error occurred while deleting the post: {e}'
 
-# if __name__ == "__main__":
-#     app.run(debug=True)
+@app.route('/feeling')
+def feeling():
+    return render_template("feeling.html")
