@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block title %}記事を表示{% endblock %}
+{% block content %}
+    <h2>記事一覧</h2>
+    <a href="./create">追加</a>
+    
+    <div class="recipe-section">
+        {% for recipe in Recipe_temp %}
+            <article class="recipe-items">
+                <div class="recipe-content-wrapper">
+                    <img src="{{ recipe.image_path }}" alt="{{recipe.image_path}}">
+                    <div class="recipe-details">
+                        <h3>{{ recipe.recipe_name }}</h3>
+                        <p>{{ recipe.created_at }}</p>
+                        <p>{{ recipe.image_path }}</p>
+                    </div>
+                </div>
+                <a href="{{ url_for( 'edit', id=recipe.id)}}">編集ボタン</a>
+                <a href="{{ url_for( 'delete', id=recipe.id)}}">削除ボタン</a>
+            <hr>
+            </article>
+        
+        {% else %}
+            <p>記事がありません。</p>
+        </div>{% endfor %}
+    
+
+{% endblock %}

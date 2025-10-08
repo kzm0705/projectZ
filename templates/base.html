@@ -4,11 +4,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
 </head>
 <body>
     <header>
-        <div id="nav-bar"><h1>継承部分</h1></div>
+    <div class="menu-icon" id="menu-icon">
+        <div class="nav-bar"></div>
+        <div class="nav-bar"></div>
+        <div class="nav-bar"></div>
+    </div>
+    <div class="nav-menu" id="nav-menu">
+        <ul>
+            <li><a href="{{ url_for('index')}}">Home</a></li>
+            <li><a href="{{ url_for('gallery')}}">登録料理一覧</a></li>
+            <li><a href="{{ url_for('create')}}">料理の登録</a></li>
+            <li><a href="{{ url_for('feeling')}}">今日の気分は？</a></li>
+            <li><a href="{{ url_for('upload')}}">画像アップロード</a></li>
+        </ul>
+    </div>
+    <script src="{{ url_for('static', filename='js/menu_bar.js')}}"></script>
     </header>
     {% block content %}
     {% endblock %}

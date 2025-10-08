@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block content %}
+    <h2>画像アップロード</h2>
+    <img id="preview" src="#" alt="画像プレビュー" style="max-width: 300px; max-height: 300px;">
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('upload')}}">
+        <input type="file" name="file" id="file-input" required>
+        <input type="submit" value="upload">
+        </form>
+    {% if context %}
+        <p>{{ context.msg }}</p>
+        <p>{{ context.image_path}}</p>
+    {% endif %}
+
+    {% if img_li %}
+        <h3>今までにアップロードされた画像</h3>
+        <div class="image-gallery">
+        {% for img in img_li %}
+            <div class="imgage-item">
+                <img src="{{ img.image_path }}" alt="{{ img.image_path}}" style="max-width: 200px; max-height: 200px;">
+                <p>{{ img.id }}</p>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    <script src="{{ url_for( 'static', filename='js/image_review.js')}}"></script>
+
+
+{% endblock %}

@@ -21,3 +21,23 @@ class Post(db.Model):
     body = db.Column(db.String(300), nullable=False)
     tokyo_timzone = pytz.timezone('Asia/Tokyo')
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(tokyo_timzone))
+
+class Recipes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    recipe_name = db.Column(db.String(200), nullable=False)
+    recipe_image =db.Column(db.String(400), nullable=True)
+    tokyo_timzone = pytz.timezone('Asia/Tokyo')
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(tokyo_timzone))
+
+
+class images(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image_path =db.Column(db.String(400), nullable=False)
+
+
+class Recipe_temp(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    recipe_name = db.Column(db.String(200), nullable=False)
+    image_path = db.Column(db.String(400), nullable=False)
+    tokyo_timzone = pytz.timezone('Asia/Tokyo')
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(tokyo_timzone))

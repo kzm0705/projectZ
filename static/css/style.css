@@ -1,0 +1,274 @@
+/* base.html */
+.menu-icon {
+    position:fixed;
+    top:20px;
+    right: 20px;
+    z-index: 100;
+    cursor: pointer;
+    padding: 10px;
+}
+
+
+.nav-bar{
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin: 5px 0;
+    transition: 0.4s; /* 開閉時のアニメーション用 */
+}
+
+/* ナビゲーションメニューの初期状態（画面外に隠す） */
+.nav-menu {
+    position: fixed;
+    top: 0;
+    right: -250px; /* 初期状態で右端から250px外に配置 */
+    width: 250px;
+    height: 100%;
+    background-color: #f8f8f8;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    transition: 0.4s;
+    z-index: 90;
+    padding-top: 60px;
+}
+
+/* メニューが開いたときに追加するクラス */
+.nav-menu.open {
+    right: 0; /* 画面内にスライドイン */
+}
+
+/* アイコンが「X」に変わるアニメーション（オプション） */
+.menu-icon.change .nav-bar:nth-child(1) {
+    transform: translateY(8px) rotate(-45deg);
+}
+
+.menu-icon.change .nav-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-icon.change .nav-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(45deg);
+}
+
+
+/* index.html */
+/* Bodyのスタイル */
+body {
+    background-color: #FFA07A; /* 綺麗なサーモンオレンジのような色 */
+    margin: 0;
+    padding: 20px; /* コンテンツが円に隠れないようにパディングを設定 */
+    font-family: Arial, sans-serif;
+    color: #333;
+    min-height: 100vh; /* 画面全体の高さを確保 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* 円が画面外に出てもスクロールバーが出ないように */
+    position: relative; /* 円の配置基準とするため */
+}
+
+h1, p {
+    z-index: 1; /* 円よりも手前に表示されるように */
+    text-align: center;
+}
+
+/* 動く円のスタイル */
+.moving-circle {
+    position: absolute; /* 親要素（body）を基準に配置 */
+    /* 画面の約1/3の大きさに設定 */
+    width: 33.33vw; /* viewport widthの1/3 */
+    height: 33.33vw; /* viewport widthの1/3 (正円にするため) */
+    border-radius: 50%; /* 円形にする */
+    background-color: rgba(255, 255, 255, 0.4); /* 半透明の白色 */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2); /* 少し影をつける */
+    z-index: 0; /* bodyのコンテンツより奥に表示 */
+
+    /* 初期位置: 右下の画面外 */
+    bottom: -10%; /* 画面の下端から少しはみ出す */
+    right: -10%; /* 画面の右端から少しはみ出す */
+
+    /* アニメーションの設定 */
+    animation: moveCircle 10s linear infinite; /* 15秒で1周、直線的に無限に繰り返す */
+}
+
+/* キーフレームアニメーションの定義 */
+@keyframes moveCircle {
+    0% {
+        bottom: -50%;
+        right: -50%;
+        transform: scale(1); /* 最初は通常のサイズ */
+        opacity: 0.1;
+    }
+    50% {
+        bottom: 50%;
+        right: 50%;
+        transform: scale(1.2); /* 中間地点で少し拡大 */
+        opacity: 0.7;
+    }
+    100% {
+        bottom: 100%; /* 画面の上端まで移動 */
+        right: 100%; /* 画面の左端まで移動 */
+        transform: scale(0.8); /* 最後に少し縮小 */
+        opacity: 0.1;
+    }
+}
+
+/* base.html */
+
+
+
+/* upload.html */
+/* ギャラリー全体（親要素）にFlexboxを適用 */
+.image-gallery {
+    display: flex; /* 子要素を横並びにする */
+    flex-wrap: wrap; /* 画面幅が足りなくなったら折り返す */
+    gap: 10px; /* 画像と画像の間隔を10px空ける */
+    padding: 10px; /* 外側の余白 */
+}
+
+/* 画像一つ一つ（子要素）のサイズ設定 */
+.image-item {
+    /* calc()を使って、4つの要素と間隔（gap）のスペースを計算 */
+    /* (100% / 4)で4分割し、gap分のスペースを引く */
+    flex-basis: calc(25% - 7.5px); 
+    
+    /* 補足：
+     * gapが10pxの場合、4つのアイテム間に3つの間隔(30px)ができます。
+     * 各アイテムに均等に分けるため、 (3 * 10px) / 4 = 7.5px を引いています。
+     */
+    
+    /* 画像が小さくても大きくても、幅いっぱいに広がる設定を無効化 */
+    flex-grow: 0;
+    flex-shrink: 0; 
+}
+
+/* 重要な設定：画像が親要素からはみ出さないようにする */
+.image-item img {
+    width: 100%; /* 親要素(image-item)の幅いっぱいに広げる */
+    height: auto; /* 縦横比を維持する */
+    display: block; /* 余計な空白を削除する */
+}
+
+
+/* create.html */
+/* 1. 親要素にFlexboxを適用して横並びにする */
+.register-zone {
+    display: flex;        /* 子要素（view-zoneとinput-zone）を横に並べる */
+    gap: 30px;            /* 要素間の間隔 */
+    align-items: flex-start; /* 子要素の配置を上端揃えにする */
+    margin-top: 20px;
+}
+
+/* 2. 左側の画像エリア（全体の約半分を占める） */
+.view-zone {
+    /* 均等に二分割するために、幅を50%に設定 */
+    flex-basis: 50%;
+    
+    /* 画面サイズに合わせて縮小・拡大できるように設定 */
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    width: 100%;
+    padding-bottom: 50%;
+    position: relative;
+
+    border:2px dashed #a0a0a0;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 3. 画像エレメント（#preview）の調整 */
+.preview {
+    /* ★ 親要素の view-zone に合わせて画像を配置 */
+    position: absolute; /* 親要素 .view-zone の左上 (0,0) を基準に配置 */
+    top: 0;
+    left: 0;
+    
+    width: 100%;
+    height: 100%;
+    
+    /* 画像が枠をはみ出さないようにし、縦横比を保ちつつ枠を埋める */
+    object-fit: contain; /* または 'cover' */ 
+    
+    /* 初期表示で画像がない場合は非表示にする */
+    display: none; 
+
+    
+}
+
+
+/* 2. マウスオーバー時（:hover）の状態を設定 */
+.view-zone:hover {
+    /* ★ わずかに画像を縮小させる */
+    /* 100%から99%に縮小し、「押されている」感覚を演出 */
+    transform: scale(0.99); 
+    
+    /* ★ 影を付けて浮き上がっているような効果を出す */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+    
+    /* 不透明度を少し下げる（オプション）*/
+    /* opacity: 0.9; */ 
+}
+
+/* 3. 右側の入力エリア（残りの約半分を占める） */
+.input-zone {
+    /* 均等に二分割するために、幅を50%に設定 */
+    flex-basis: 50%;
+    
+    /* 画面サイズに合わせて縮小・拡大できるように設定 */
+    flex-grow: 1;
+    flex-shrink: 1;
+    border: 1px solid #ccc; /* プレビューエリアを目立たせるための線 */
+    padding: 10px;
+}
+
+/* フォーム要素の調整（見栄えを良くするため）*/
+.input-zone form {
+    display: flex;
+    flex-direction: column; /* フォーム内の要素を縦に並べる */
+    gap: 10px;
+}
+
+.input-zone input[type="text"],
+.input-zone input[type="file"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.view-zone img {
+    /* 画像が枠内に収まるように調整 */
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+
+/* gallery.html */
+/* gallery.html のCSSブロック全体を置き換えてください */
+
+div.recipe-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+article.recipe-items {
+    border-radius: 10px;
+    background-color: #f8f8f8;
+}
+
+article.recipe-items img {
+    width: 200px;
+    height: auto;
+    border-radius: 10px 10px 10px 10px;
+    display: block;
+    
+}
