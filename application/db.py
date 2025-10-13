@@ -41,3 +41,7 @@ class Recipe_temp(db.Model):
     image_path = db.Column(db.String(400), nullable=False)
     tokyo_timzone = pytz.timezone('Asia/Tokyo')
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(tokyo_timzone))
+
+class Ingredients_temp(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    ingredient_name = db.Column(db.String(200), nullable=False)

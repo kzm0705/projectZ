@@ -1,13 +1,71 @@
 <!DOCTYPE html>
-{% extends "base.html" %}
-{% block title %}記事編集{% endblock %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>編集画面</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style2.css')}}">
+</head>
+<body>
+    <header>
+    <div class="menu-icon" id="menu-icon">
+        <div class="nav-bar"></div>
+        <div class="nav-bar"></div>
+        <div class="nav-bar"></div>
+    </div>
+    <div class="nav-menu" id="nav-menu">
+        <ul>
+            <li><a href="{{ url_for('index')}}">Home</a></li>
+            <li><a href="{{ url_for('gallery')}}">登録料理一覧</a></li>
+            <li><a href="{{ url_for('create')}}">料理の登録</a></li>
+            <li><a href="{{ url_for('feeling')}}">今日の気分は？</a></li>
+            <li><a href="{{ url_for('upload')}}">画像アップロード</a></li>
+        </ul>
+    </div>
+    <script src="{{ url_for('static', filename='js/menu_bar.js')}}"></script>
+    </header>
+</body>
 {% block content %}
-    <h2>記事編集</h2>
-    <form method="POST">
-        <label for="'title">タイトル</label>
-        <input type="text" id="title" name="title" value="{{ post.title}}" required>
-        <label for="body">内容</label>
-        <input type="text" id="body" name="body" value="{{ post.body}}" required>
-        <input type="submit" value="更新">
-    </form>
+    <div class="edit-container">
+        <div class="edit-header">
+        <h2>レシピ編集</h2>
+        </div>
+        <div class="edit-zone">
+            <form method="POST" action="{{ url_for('edit', id=recipe.id)}}" enctype="multipart/form-data" class="recipe-layout-grid">
+                <div class="img-zone">
+                    <img src="{{url_for('static', filename=recipe.image_path) }}" alt="料理画像" >
+                </div>
+                    <div class="recipe-title">
+                        <label for="recipe_name">料理名</label>
+                        <input type="text" name="recipe_name" id="recipe_name" value="{{ recipe.recipe_name}}" placeholder="ロコモコ丼" required>
+                    </div>
+                    <div class="ingredient-zone">
+                        <div class="ingredients-input">
+                            <label for="ingredients">食材</label>
+                            <label for="number-of-people">何人分</label>
+                            <input type="text" name="number-of-people" size="10">
+                        </div>
+                    <div class="ingredient-insert-delete-button">
+                        <button type="button" id="add-ingredient-btn">+</button>
+                        <button type="button" id="delete-ingredient-btn">-</button>
+                    </div>
+                    </div>
+                    <div id="recipe-flow-zone">
+                        <div class="recipe-flow-title">
+                            <label for="recipe-flow-title">レシピの手順</label>
+                        </div>
+                        <div class="recipe-flow-item">
+                            <!-- <textarea name="recipe-flow" class="recipe-item" rows="4" cols="30" placeholder="レシピの手順を入力してください。" required></textarea> -->
+                        </div>
+                        <div class="aad-recipe-flow-item">
+                                <button type="button" id="add-recipe-flow-btn">+</button>
+                        </div>
+                    </div>
+                <div class="submit-btn">
+                    <button type="submit">レシピの更新</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/insert_delete_ingre.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/insert_recipe_flow.js' ) }}"></script>
 {% endblock %}

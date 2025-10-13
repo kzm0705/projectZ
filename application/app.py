@@ -43,16 +43,11 @@ def create():
 #UPDATE
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
-    post = Post.query.get_or_404(id)
-    if request.method == 'POST':
-        post.title = request.form['title']
-        post.body = request.form['body']
-        try:
-            db.session.commit()
-            return redirect(url_for('gallery'))
-        except Exception as e:
-            return f"An error occurred while updating the post: {e}"
-    return render_template('edit.html', post=post)
+    recipe = Recipe_temp.query.get_or_404(id)
+    recipe.image_path = recipe.image_path.replace('static\\','').replace('\\', '/')
+
+    return render_template('edit.html', recipe=recipe)
+
 #DELETE
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -90,7 +85,7 @@ def upload():
             img =  Image.open(image_path)
             img.save(full_path ,format='PNG')
             #dbに保存するパス
-            db_image_path = os.path.join('static', 'images', file_name)
+            db_image_path = os.path.join('images', file_name)
 
             new_image = images(image_path=db_image_path)
 
