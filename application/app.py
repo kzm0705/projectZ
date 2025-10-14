@@ -10,6 +10,7 @@ from image_module.save_image import save_image
 
 import os
 from PIL import Image
+import re
 
 basedir = os.path.abspath(os.path.dirname('static'))
 
@@ -43,6 +44,18 @@ def create():
 #UPDATE
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
+    if request.method =='POST':
+        recipe_name = request.form['recipe_name']
+        number_of_people = request.form['number-of-people']
+        array_data = {}
+        for k in request.form.keys():
+            if re.match(r'.+\[\]', k):
+                array_key = k.replace('[]', '')
+                array_data[array_key] = request.form.getlist(k)
+        print(f'{recipe_name}:{number_of_people}\n{array_data}')
+
+        return redirect(  url_for('gallery'))
+    
     recipe = Recipe_temp.query.get_or_404(id)
     recipe.image_path = recipe.image_path.replace('static\\','').replace('\\', '/')
 
