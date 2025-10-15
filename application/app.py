@@ -7,6 +7,8 @@ from werkzeug.utils import secure_filename
 from db import db, Post, images, Recipe_temp
 from init import app
 from image_module.save_image import save_image
+from db_module.create_ingre_recipe import create_ingredient_recipe_query
+
 
 import os
 from PIL import Image
@@ -52,7 +54,7 @@ def edit(id):
             if re.match(r'.+\[\]', k):
                 array_key = k.replace('[]', '')
                 array_data[array_key] = request.form.getlist(k)
-        print(f'{recipe_name}:{number_of_people}\n{array_data}')
+        create_ingredient_recipe_query(id,array_data)
 
         return redirect(  url_for('gallery'))
     
