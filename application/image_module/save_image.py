@@ -17,7 +17,7 @@ def save_image(file_name, recipe_name=None):
         img = Image.open(file_name)
         img.save(full_path, format='PNG')
                 #dbに保存するパス
-        db_image_path = os.path.join('images', file_name.filename)
+        db_image_path = os.path.join('images', file_name.filename).replace('\\', "/")
 
         new_image = Recipe_temp(image_path=db_image_path, recipe_name=recipe_name)
 

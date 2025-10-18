@@ -9,16 +9,20 @@
         {% for recipe in Recipe_temp %}
             <article class="recipe-items">
                 <div class="recipe-content-wrapper">
-                    <img src="{{ recipe.image_path }}" alt="{{recipe.image_path}}">
+                    <img src="{{ url_for( 'static', filename=recipe.image_path)}}" alt="{{recipe.image_path}}">
                     <div class="recipe-details">
                         <h3>{{ recipe.recipe_name }}</h3>
                         <p>{{ recipe.created_at }}</p>
                         <p>{{ recipe.image_path }}</p>
                     </div>
                 </div>
-                <a href="{{ url_for('recipe', id=recipe.id)}}">レシピを見る</a>
+                <div>
+                <a href="{{ url_for('recipe', id=recipe.id)}}">レシピを見る</a><br>
                 <a href="{{ url_for( 'edit', id=recipe.id)}}">編集ボタン</a>
-                <a href="{{ url_for( 'delete', id=recipe.id)}}">削除ボタン</a>
+                <form action="{{ url_for( 'delete', id=recipe.id )}}" method="post" onsubmit=" return confirm('本当にこのレシピを削除しますか？')">
+                    <button type="submit" class="delete-button">削除</button>
+                </form>
+                </div>
             <hr>
             </article>
         

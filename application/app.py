@@ -8,6 +8,7 @@ from sqlalchemy.orm import joinedload
 from db import db, Post, images, Recipe_temp, Ingredients_temp, Steps
 from init import app
 from image_module.save_image import save_image
+from image_module.remove_image import remove_image
 from db_module.create_ingre_recipe import create_ingredient_recipe_query, crate_steps_query
 
 
@@ -28,6 +29,7 @@ def index():
 @app.route('/gallery', methods=['GET', 'POST'])
 def gallery():
     recipes = Recipe_temp.query.all()
+    # recipes.image_path = recipes.image_path.replace('static\\','').replace('\\', '/')
     return render_template('gallery.html', Recipe_temp=recipes)
 
 #CRUDのC
@@ -67,13 +69,15 @@ def edit(id):
     return render_template('edit.html', recipe=recipe)
 
 #DELETE
-@app.route('/delete/<int:id>')
+@app.route('/delete/<int:id>', methods=['POST'])
 def delete(id):
-    post = Post.query.get_or_404(id)
+    recipe = Recipe_temp.query.get_or_404(id)
+    path = recipe.image_path
     try:
-        db.session.delete(post)
+        db.session.delete(recipe)
         db.session.commit()
-        return redirect('gallery')
+        remove_image(path)
+        return redirect( url_for('gallery'))
     except Exception as e:
         return f'An error occurred while deleting the post: {e}'
     
