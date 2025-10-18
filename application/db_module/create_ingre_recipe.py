@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
-from db import db, Ingredients_temp
+from db import db, Ingredients_temp, Steps
 
 def create_ingredient_recipe_query(id, ingre_array):
     Ingredients_temp.query.filter_by(recipe_id=id).delete()
@@ -19,4 +19,21 @@ def create_ingredient_recipe_query(id, ingre_array):
 
         else:print('食材か分量のどっちかが空欄でした。')
 
+    db.session.commit()
+
+
+def crate_steps_query(id, ingre_array):
+    Steps.query.filter_by(recipe_id=id).delete()
+    db.session.commit()
+    steps = ingre_array.get('recipe-flow',[])
+    for i, step in enumerate(steps):
+        i+=1
+        if step.strip():
+            new_step = Steps(
+                recipe_id = id,
+                step_number = i,
+                instruction = step,
+            )
+            db.session.add(new_step)
+        else:print('何らかのエラーが起きたお')
     db.session.commit()

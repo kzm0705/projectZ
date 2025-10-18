@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block content %}
+
+<h1>レシピ表示画面</h1>
+<div class="recipe-title">
+    <h2>{{ recipe.recipe_name}}</h2>
+    <img src="{{ url_for( 'static', filename= recipe.image_path )}}" style="max-width: 300px; max-height: 300px;">
+    <span>作成日：{{ recipe.created_at}}</span>
+    <h3>{{ recipe.num_people }}</h3>
+</div>
+<div class="ingredient-display-zone">
+    <h2>🍴 食材</h2>
+    <ul class="ingredient-list">
+        {% if recipe.Ingredients_temp %}
+            {% for ing in recipe.Ingredients_temp %}
+            <li>
+                <span class="ing-name">{{ ing.ingredient_name }}：</span>
+                <span class="ing-amount">{{ ing.amount }}</span>
+            </li>
+            {% endfor %}
+        {% else %}
+            <li>食材データが登録されていません。</li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="flow-content-zone">
+    <h2>📝 作り方</h2>
+    <ol class="flow-list">
+        {% if recipe.Steps %}
+            {% for flow in recipe.Steps %}
+            <li class="flow-step">
+                <div class="step-text">{{ flow.instruction }}</div>
+            </li>
+            {% endfor %}
+        {% else %}
+            <li>手順が登録されていません。</li>
+        {% endif %}
+    </ol>
+</div>
+{% endblock content %}

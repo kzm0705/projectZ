@@ -3,11 +3,12 @@
 from flask import Flask
 from flask import render_template,request,redirect, url_for
 from werkzeug.utils import secure_filename
+from sqlalchemy.orm import joinedload
 
-from db import db, Post, images, Recipe_temp
+from db import db, Post, images, Recipe_temp, Ingredients_temp, Steps
 from init import app
 from image_module.save_image import save_image
-from db_module.create_ingre_recipe import create_ingredient_recipe_query
+from db_module.create_ingre_recipe import create_ingredient_recipe_query, crate_steps_query
 
 
 import os
@@ -50,11 +51,13 @@ def edit(id):
         recipe_name = request.form['recipe_name']
         number_of_people = request.form['number-of-people']
         array_data = {}
+        #材料と分量と手順それぞれのリストを作り対応するクエリを作成しコミット
         for k in request.form.keys():
             if re.match(r'.+\[\]', k):
                 array_key = k.replace('[]', '')
                 array_data[array_key] = request.form.getlist(k)
         create_ingredient_recipe_query(id,array_data)
+        crate_steps_query(id, array_data)
 
         return redirect(  url_for('gallery'))
     
@@ -73,6 +76,40 @@ def delete(id):
         return redirect('gallery')
     except Exception as e:
         return f'An error occurred while deleting the post: {e}'
+    
+
+@app.route('/recipe/<int:id>')
+def recipe(id):
+    recipe = Recipe_temp.query.options(
+        joinedload(Recipe_temp.Ingredients_temp),
+        joinedload(Recipe_temp.Steps)
+    ).get_or_404(id)
+    recipe.image_path = recipe.image_path.replace('static\\','').replace('\\', '/')
+    # print(f'----レシピデータ-----')
+    # print(f'料理名:{recipe.recipe_name}; ID : {recipe.id}')
+    # print(f'{recipe.num_people}人分のレシピです')
+
+    # print("-----食材リスト------")
+    # if recipe.Ingredients_temp:
+    #     for ing in recipe.Ingredients_temp:
+    #         # モデルの属性名（例: name, amount）を使って出力
+    #         print(f"  - {ing.ingredient_name}: {ing.amount}")
+    # else:
+    #     print("  - 食材データなし")
+
+    # # 📝 手順リストの出力
+    # print("\n--- 手順リスト ---")
+    # if recipe.Steps:
+    #     # loop.index のように、enumerateで順番を付けて出力
+    #     for index, flow in enumerate(recipe.Steps):
+    #         # モデルの属性名（例: description）を使って出力
+    #         print(f"  {index + 1}. {flow.description}")
+    # else:
+    #     print("  - 手順データなし")
+    # print("-------------------------")
+    # # ingredients = Ingredients_temp.query.get_or_404(id)
+    # # steps = Steps.query.get_or_404(id)
+    return render_template('recipe.html', recipe=recipe)
 
 @app.route('/feeling')
 def feeling():

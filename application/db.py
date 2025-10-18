@@ -43,11 +43,20 @@ class Recipe_temp(db.Model):
     recipe_name = db.Column(db.String(200), nullable=False)
     image_path = db.Column(db.String(400), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=get_tokyo_datetime)
-
+    num_people = db.Column(db.String(20), nullable=True)
     Ingredients_temp = db.relationship('Ingredients_temp', backref='recipe',lazy=True, cascade="all, delete-orphan")
+    Steps = db.relationship('Steps',backref='recipe',lazy=True, cascade="all, delete-orphan")
 
+    
 class Ingredients_temp(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe_temp.id'), nullable=False)
     ingredient_name = db.Column(db.String(200), nullable=False)
     amount = db.Column(db.String(50), nullable=False)
+
+
+class Steps(db.Model):
+    step_id = db.Column(db.Integer, primary_key=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe_temp.id'), nullable=False)
+    step_number = db.Column(db.String(100), nullable=False)
+    instruction = db.Column(db.String(300), nullable=False)
