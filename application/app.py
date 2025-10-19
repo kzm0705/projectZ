@@ -1,5 +1,3 @@
-# pyapp/application/app.py
-
 from flask import Flask
 from flask import render_template,request,redirect, url_for
 from werkzeug.utils import secure_filename
@@ -10,7 +8,6 @@ from init import app
 from image_module.save_image import save_image
 from image_module.remove_image import remove_image
 from db_module.create_ingre_recipe import create_ingredient_recipe_query, crate_steps_query
-
 
 import os
 from PIL import Image
