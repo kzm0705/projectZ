@@ -2,24 +2,33 @@
 {% extends "base.html" %}
 {% block title %}新規登録{% endblock %}
 {% block content %}
-    <h2>料理の登録</h2>
+<body>
+    <h2 id="page-title">料理の登録</h2>
+    <div class="errors-zone" role="alert">
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
     <div class="register-zone">
         <div class="view-zone">
-            <img id="preview" src="#" alt="画像プレビュー" >
+            <img id="preview" src="#" alt="ここに表示されます" >
         </div>
-    
         <div class="input-zone">
             <form method="POST" enctype="multipart/form-data" action="{{ url_for('create')}}" >
                 <label for="recipe_name">料理名</label>
-                <input type="text" name="recipe_name" id="recipe_name" required>
+                <input type="text" name="recipe_name" id="recipe_name" maxlength="50"
+                                value="{{ input_name if input_name else ''}}" required>
                 <label for="file">画像をいれてください(ビューに表示されます)</label>
-                <input type="file" name="file" id="file-input" required >
+                <input type="file" name="file" id="file-input" required>
                 <input type="submit" value="次に進む">
             </form>
         </div>
     </div>
     <script src="{{ url_for( 'static', filename='js/image_review.js')}}"></script>
     <script src="{{ url_for( 'static', filename='js/image_click.js')}}"></script>
-
+    <script src="{{ url_for( 'static', filename='js/create_vli.js')}}"></script>
+</body>
 
 {% endblock %}

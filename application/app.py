@@ -1,5 +1,3 @@
-# pyapp/application/app.py
-
 from flask import Flask
 from flask import render_template,request,redirect, url_for
 from werkzeug.utils import secure_filename
@@ -9,8 +7,8 @@ from db import db, Post, images, Recipe_temp, Ingredients_temp, Steps
 from init import app
 from image_module.save_image import save_image
 from image_module.remove_image import remove_image
+from image_module.image_vli import allowed_file, MAX_FILE_SIZE
 from db_module.create_ingre_recipe import create_ingredient_recipe_query, crate_steps_query
-
 
 import os
 from PIL import Image
@@ -19,6 +17,7 @@ import re
 basedir = os.path.abspath(os.path.dirname('static'))
 
 UPLOAD_FOLDER = os.path.join(basedir, 'static', 'images')
+MAX_RECIPE_NAME_LENGTH = 50
 
 # ルーティング設定
 @app.route("/")
@@ -36,13 +35,38 @@ def gallery():
 @app.route("/create", methods=['GET', 'POST'])
 def create():
     if request.method == 'POST':
-        #SQL処理
-        recipe_name = request.form['recipe_name']
-        if 'file' not in request.files or request.files['file'].filename == "":
-            return render_template('upload.html', msg="ファイルが選択されていません。")
-        
-        save_image(request.files['file'], recipe_name=recipe_name)
+        recipe_name =request.form.get('recipe_name', '').strip()
+        # 料理名のバリデーション
+        errors = []
+        if not recipe_name:
+            errors.append('料理名は入力必須です')
 
+        if len(recipe_name) > MAX_RECIPE_NAME_LENGTH:
+            errors.append(f"料理名は{MAX_RECIPE_NAME_LENGTH}字以内で入力してください")
+
+        # 画像のバリデーション
+        file = request.files.get('file')
+        if 'file' not in request.files or request.files['file'].filename == "":
+            errors.append('画像を必ず選択してください')
+        else:
+            if not allowed_file(file.filename):
+                errors.append('許可されていない画像形式です。PNG, JPG, GIFのみ対応しています。')
+
+            # ファイルポインタを先頭に戻してから、サイズをチェック
+            file.seek(0)
+            file_data = file.read()
+            
+            if len(file_data) > MAX_FILE_SIZE:
+                errors.append(f"ファイルサイズが大きすぎます。{MAX_FILE_SIZE // (1024*1024)}MB以下のファイルをアップロードしてください。")
+                # チェック後にファイルポインタを先頭に戻す (save_imageで再度読み込むため)
+                file.seek(0)
+        # ---エラー処理---
+        if errors:
+            render_template('create.html', errors=errors, input_name=recipe_name)
+
+        # --- 正常処理 ---
+        # 全てのバリデーションをクリアしたら画像を保存
+        save_image(request.files['file'], recipe_name=recipe_name)
         return redirect(  url_for('gallery') )
     return render_template('create.html')
 

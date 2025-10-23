@@ -4,9 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}" id="css-zone">
 </head>
-<body>
     <header>
     <div class="menu-icon" id="menu-icon">
         <div class="nav-bar"></div>
@@ -26,5 +25,4 @@
     </header>
     {% block content %}
     {% endblock %}
-</body>
 </html>
